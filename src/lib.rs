@@ -41,6 +41,7 @@ mod rules;
 mod rustpython_helpers;
 pub mod settings;
 pub mod source_code;
+pub mod tokenizer;
 mod vendor;
 mod violation;
 mod violations;

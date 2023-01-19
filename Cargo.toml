@@ -59,6 +59,7 @@ smallvec = { version = "1.10.0" }
 strum = { version = "0.24.1", features = ["strum_macros"] }
 strum_macros = { version = "0.24.3" }
 textwrap = { version = "0.16.0" }
+thiserror = "1.0.38"
 titlecase = { version = "2.2.1" }
 toml_edit = { version = "0.17.1", features = ["easy"] }
 
@@ -98,5 +99,5 @@ opt-level = 3
 opt-level = 1
 
 [[bench]]
-name = "source_code_locator"
+name = "tokenizer"
 harness = false
