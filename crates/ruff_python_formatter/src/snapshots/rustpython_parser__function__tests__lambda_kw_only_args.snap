@@ -1,0 +1,62 @@
+---
+source: parser/src/function.rs
+expression: parse_ast
+---
+Ok(
+    [
+        Expr(
+            StmtExpr {
+                range: 0..20,
+                value: Lambda(
+                    ExprLambda {
+                        range: 0..20,
+                        args: Arguments {
+                            range: (),
+                            posonlyargs: [],
+                            args: [],
+                            vararg: None,
+                            kwonlyargs: [
+                                Arg {
+                                    range: 10..11,
+                                    arg: Identifier(
+                                        "a",
+                                    ),
+                                    annotation: None,
+                                    type_comment: None,
+                                },
+                                Arg {
+                                    range: 13..14,
+                                    arg: Identifier(
+                                        "b",
+                                    ),
+                                    annotation: None,
+                                    type_comment: None,
+                                },
+                                Arg {
+                                    range: 16..17,
+                                    arg: Identifier(
+                                        "c",
+                                    ),
+                                    annotation: None,
+                                    type_comment: None,
+                                },
+                            ],
+                            kw_defaults: [],
+                            kwarg: None,
+                            defaults: [],
+                        },
+                        body: Constant(
+                            ExprConstant {
+                                range: 19..20,
+                                value: Int(
+                                    1,
+                                ),
+                                kind: None,
+                            },
+                        ),
+                    },
+                ),
+            },
+        ),
+    ],
+)

@@ -1,0 +1,29 @@
+[package]
+name = "ruff-python-parser"
+version = "0.0.0"
+description = "Parser for python code."
+authors.workspace = true
+repository.workspace = true
+edition.workspace = true
+
+[build-dependencies]
+phf_codegen = "0.11.1"
+
+[dependencies]
+rustpython-ast = { workspace = true }
+# TODO remove dependency
+rustpython-parser-core = { workspace = true }
+ruff_text_size = { workspace = true }
+
+itertools = { workspace = true }
+num-bigint = { workspace = true }
+num-traits = { workspace = true }
+unicode_names2 = { workspace = true }
+
+unic-emoji-char = "0.9.0"
+unic-ucd-ident  = "0.9.0"
+phf = "0.11.1"
+rustc-hash = "1.1.0"
+
+[dev-dependencies]
+insta = { workspace = true }

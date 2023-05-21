@@ -1,0 +1,130 @@
+---
+source: parser/src/parser.rs
+expression: "parse_program(source, \"<test>\").unwrap()"
+---
+[
+    ClassDef(
+        StmtClassDef {
+            range: 0..98,
+            name: Identifier(
+                "Foo",
+            ),
+            bases: [
+                Name(
+                    ExprName {
+                        range: 10..11,
+                        id: Identifier(
+                            "A",
+                        ),
+                        ctx: Load,
+                    },
+                ),
+                Name(
+                    ExprName {
+                        range: 13..14,
+                        id: Identifier(
+                            "B",
+                        ),
+                        ctx: Load,
+                    },
+                ),
+            ],
+            keywords: [],
+            body: [
+                FunctionDef(
+                    StmtFunctionDef {
+                        range: 18..44,
+                        name: Identifier(
+                            "__init__",
+                        ),
+                        args: Arguments {
+                            range: (),
+                            posonlyargs: [],
+                            args: [
+                                Arg {
+                                    range: 31..35,
+                                    arg: Identifier(
+                                        "self",
+                                    ),
+                                    annotation: None,
+                                    type_comment: None,
+                                },
+                            ],
+                            vararg: None,
+                            kwonlyargs: [],
+                            kw_defaults: [],
+                            kwarg: None,
+                            defaults: [],
+                        },
+                        body: [
+                            Pass(
+                                StmtPass {
+                                    range: 40..44,
+                                },
+                            ),
+                        ],
+                        decorator_list: [],
+                        returns: None,
+                        type_comment: None,
+                    },
+                ),
+                FunctionDef(
+                    StmtFunctionDef {
+                        range: 46..98,
+                        name: Identifier(
+                            "method_with_default",
+                        ),
+                        args: Arguments {
+                            range: (),
+                            posonlyargs: [],
+                            args: [
+                                Arg {
+                                    range: 70..74,
+                                    arg: Identifier(
+                                        "self",
+                                    ),
+                                    annotation: None,
+                                    type_comment: None,
+                                },
+                                Arg {
+                                    range: 76..79,
+                                    arg: Identifier(
+                                        "arg",
+                                    ),
+                                    annotation: None,
+                                    type_comment: None,
+                                },
+                            ],
+                            vararg: None,
+                            kwonlyargs: [],
+                            kw_defaults: [],
+                            kwarg: None,
+                            defaults: [
+                                Constant(
+                                    ExprConstant {
+                                        range: 80..89,
+                                        value: Str(
+                                            "default",
+                                        ),
+                                        kind: None,
+                                    },
+                                ),
+                            ],
+                        },
+                        body: [
+                            Pass(
+                                StmtPass {
+                                    range: 94..98,
+                                },
+                            ),
+                        ],
+                        decorator_list: [],
+                        returns: None,
+                        type_comment: None,
+                    },
+                ),
+            ],
+            decorator_list: [],
+        },
+    ),
+]

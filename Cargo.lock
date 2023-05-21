@@ -1783,6 +1783,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "ruff-python-parser"
+version = "0.0.0"
+dependencies = [
+ "insta",
+ "itertools",
+ "num-bigint",
+ "num-traits",
+ "phf",
+ "phf_codegen",
+ "ruff_text_size",
+ "rustc-hash",
+ "rustpython-ast",
+ "rustpython-parser-core",
+ "unic-emoji-char",
+ "unic-ucd-ident",
+ "unicode_names2",
+]
+
+[[package]]
 name = "ruff_benchmark"
 version = "0.0.0"
 dependencies = [

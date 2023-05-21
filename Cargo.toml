@@ -25,6 +25,8 @@ itertools = { version = "0.10.5" }
 libcst = { git = "https://github.com/charliermarsh/LibCST", rev = "80e4c1399f95e5beb532fdd1e209ad2dbb470438" }
 log = { version = "0.4.17" }
 nohash-hasher = { version = "0.2.0" }
+num-bigint = "0.4.3"
+num-traits = "0.2.15"
 once_cell = { version = "1.17.1" }
 path-absolutize = { version = "3.0.14" }
 proc-macro2 = { version = "1.0.51" }
@@ -34,7 +36,9 @@ rustc-hash = { version = "1.1.0" }
 ruff_text_size = { git = "https://github.com/RustPython/Parser.git", rev = "3654cf0bdfc270df6b2b83e2df086843574ad082" }
 rustpython-format = { git = "https://github.com/RustPython/Parser.git", rev = "3654cf0bdfc270df6b2b83e2df086843574ad082" }
 rustpython-literal = { git = "https://github.com/RustPython/Parser.git", rev = "3654cf0bdfc270df6b2b83e2df086843574ad082" }
+rustpython-ast = { git = "https://github.com/RustPython/Parser.git", rev = "3654cf0bdfc270df6b2b83e2df086843574ad082", default-features = false, features = ["all-nodes-with-ranges"] }
 rustpython-parser = { git = "https://github.com/RustPython/Parser.git", rev = "3654cf0bdfc270df6b2b83e2df086843574ad082", default-features = false, features = ["full-lexer", "all-nodes-with-ranges"] }
+rustpython-parser-core = { git = "https://github.com/RustPython/Parser.git", rev = "3654cf0bdfc270df6b2b83e2df086843574ad082" }
 schemars = { version = "0.8.12" }
 serde = { version = "1.0.152", features = ["derive"] }
 serde_json = { version = "1.0.93", features = ["preserve_order"] }
@@ -47,6 +51,7 @@ syn = { version = "2.0.15" }
 test-case = { version = "3.0.0" }
 textwrap = { version = "0.16.0" }
 toml = { version = "0.7.2" }
+unicode_names2 = { git="https://github.com/youknowone/unicode_names2.git", rev = "4ce16aa85cbcdd9cc830410f1a72ef9a235f2fde" }
 
 [profile.release]
 lto = "fat"
