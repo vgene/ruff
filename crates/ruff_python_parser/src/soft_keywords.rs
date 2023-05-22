@@ -1,5 +1,5 @@
 // TODO handle in parser: Always parse as soft keywords? Could this be causing issues in our lexer based lint rules?
-use crate::{lexer::LexResult, token::Tok, Mode};
+use crate::lexer::LexResult;
 use itertools::{Itertools, MultiPeek};
 
 /// An [`Iterator`] that transforms a token stream to accommodate soft keywords (namely, `match`
@@ -53,9 +53,9 @@ where
             // 3. The top-level colon is not the immediate sibling of a `match` or `case` token.
             //    (This is to avoid treating `match` and `case` as identifiers when annotated with
             //    type hints.)
-            if matches!(tok, Tok::Match | Tok::Case) {
+            if matches!(tok, TokenKind::Match | TokenKind::Case) {
                 if !self.start_of_line {
-                    next = Some(Ok((soft_to_name(tok), *range)));
+                    next = Some(Ok((*tok, *range)));
                 } else {
                     let mut nesting = 0;
                     let mut first = true;
@@ -63,23 +63,23 @@ where
                     let mut seen_lambda = false;
                     while let Some(Ok((tok, _))) = self.underlying.peek() {
                         match tok {
-                            Tok::Newline => break,
-                            Tok::Lambda if nesting == 0 => seen_lambda = true,
-                            Tok::Colon if nesting == 0 => {
+                            TokenKind::Newline => break,
+                            TokenKind::Lambda if nesting == 0 => seen_lambda = true,
+                            TokenKind::Colon if nesting == 0 => {
                                 if seen_lambda {
                                     seen_lambda = false;
                                 } else if !first {
                                     seen_colon = true;
                                 }
                             }
-                            Tok::Lpar | Tok::Lsqb | Tok::Lbrace => nesting += 1,
-                            Tok::Rpar | Tok::Rsqb | Tok::Rbrace => nesting -= 1,
+                            TokenKind::Lpar | TokenKind::Lsqb | TokenKind::Lbrace => nesting += 1,
+                            TokenKind::Rpar | TokenKind::Rsqb | TokenKind::Rbrace => nesting -= 1,
                             _ => {}
                         }
                         first = false;
                     }
                     if !seen_colon {
-                        next = Some(Ok((soft_to_name(tok), *range)));
+                        next = Some(Ok((*tok, *range)));
                     }
                 }
             }
@@ -92,29 +92,11 @@ where
                     return self.start_of_line;
                 }
 
-                matches!(
-                    tok,
-                    Tok::StartModule
-                        | Tok::StartInteractive
-                        | Tok::Newline
-                        | Tok::Indent
-                        | Tok::Dedent
-                )
+                matches!(tok, |TokenKind::Newline| TokenKind::Indent
+                    | TokenKind::Dedent)
             })
         });
 
         next
-    }
-}
-
-#[inline]
-fn soft_to_name(tok: &Tok) -> Tok {
-    let name = match tok {
-        Tok::Match => "match",
-        Tok::Case => "case",
-        _ => unreachable!("other tokens never reach here"),
-    };
-    Tok::Name {
-        name: name.to_owned(),
     }
 }

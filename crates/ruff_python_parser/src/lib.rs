@@ -118,12 +118,10 @@ mod function;
 // Skip flattening lexer to distinguish from full parser
 mod context;
 pub mod lexer;
-mod soft_keywords;
+// mod soft_keywords;
 // mod string;
-mod token;
 
 // pub use string::FStringErrorType;
-pub use token::{StringKind, Tok};
 
 pub enum Mode {
     Interactive,

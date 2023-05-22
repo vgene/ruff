@@ -4,57 +4,104 @@
 //! loosely based on the token definitions found in the [CPython source].
 //!
 //! [CPython source]: https://github.com/python/cpython/blob/dfc2e065a2e71011017077e549cd2f9bf4944c54/Include/internal/pycore_token.h
-use crate::Mode;
-use num_bigint::BigInt;
+use bitflags::bitflags;
 use ruff_text_size::TextSize;
+use std::borrow::Cow;
 use std::fmt;
 
+#[derive(Debug, Clone, Eq, PartialEq)]
+pub struct Token<'source> {
+    pub kind: TokenKind,
+    pub length: TextSize,
+    pub value: Option<Cow<'source, str>>,
+    pub flags: TokenFlags,
+}
+
+impl<'source> Token<'source> {
+    pub const fn new(kind: TokenKind, length: TextSize) -> Self {
+        Self {
+            kind,
+            length,
+            flags: TokenFlags::empty(),
+            value: None,
+        }
+    }
+
+    pub const fn eof() -> Self {
+        Self::new(TokenKind::EndOfFile, TextSize::new(0))
+    }
+
+    pub fn with_value(mut self, value: Cow<'source, str>) -> Self {
+        self.value = Some(value);
+        self
+    }
+}
+
+bitflags! {
+    #[derive(Debug, Copy, Clone, Eq, PartialEq)]
+    pub struct TokenFlags: u8 {
+        const Unterminated     = 0x0000_0001;
+
+        // TODO(micha): Consider storing the parsed Text for all Literals and then re-parsing the
+        // triple-quoted, fstring, bytes (and values for numbers) on demand. Can avoid many heap allocations
+        // if we use stack allocated strings / imstr.
+        // Strings
+        const TripleQuoted     = 0b0000_0010;
+
+        /// A f-string literal, with a `f` or `F` prefix.
+        const FString          = 0b0000_0100;
+
+        /// A byte string literal, with a `b` or `B` prefix.
+        const Bytes            = 0b0000_1000;
+        /// A raw string literal, with a `r` or `R` prefix.
+        const RawString        = 0b0001_0000;
+        /// A raw f-string literal, with a `rf`/`fr` or `rF`/`Fr` or `Rf`/`fR` or `RF`/`FR` prefix.
+        const RawFString       = 0b0010_0000;
+        /// A raw byte string literal, with a `rb`/`br` or `rB`/`Br` or `Rb`/`bR` or `RB`/`BR` prefix.
+        const RawBytes         = 0b0100_0000;
+        /// A unicode string literal, with a `u` or `U` prefix.
+        const Unicode          = 0b1000_0000;
+    }
+}
+
 /// The set of tokens the Python source code can be tokenized in.
-#[derive(Clone, Debug, PartialEq)]
-pub enum Tok {
-    /// Token value for a name, commonly known as an identifier.
-    Name {
-        /// The name value.
-        name: String,
-    },
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Ord, PartialOrd)]
+#[repr(u8)]
+pub enum TokenKind {
+    /** Literals **/
     /// Token value for an integer.
-    Int {
-        /// The integer value.
-        value: BigInt,
-    },
+    Int,
     /// Token value for a floating point number.
-    Float {
-        /// The float value.
-        value: f64,
-    },
+    Float,
     /// Token value for a complex number.
-    Complex {
-        /// The real part of the complex number.
-        real: f64,
-        /// The imaginary part of the complex number.
-        imag: f64,
-    },
+    Complex,
     /// Token value for a string.
-    String {
-        /// The string value.
-        value: String,
-        /// The kind of string.
-        kind: StringKind,
-        /// Whether the string is triple quoted.
-        triple_quoted: bool,
-    },
+    String,
+
+    /// Token value for a name, commonly known as an identifier.
+    Identifier,
+
+    /** Trivia */
     /// Token value for a comment. These are filtered out of the token stream prior to parsing.
-    Comment(String),
-    /// Token value for a newline.
-    Newline,
+    Comment,
     /// Token value for a newline that is not a logical line break. These are filtered out of
     /// the token stream prior to parsing.
     NonLogicalNewline,
+
+    EndOfFile,
+
+    Whitespace,
+
+    /* Semantic Whitespace */
+    /// Token value for a newline.
+    Newline,
+
     /// Token value for an indent.
     Indent,
     /// Token value for a dedent.
     Dedent,
-    EndOfFile,
+
+    /* Punctuation */
     /// Token value for a left parenthesis `(`.
     Lpar,
     /// Token value for a right parenthesis `)`.
@@ -151,7 +198,7 @@ pub enum Tok {
     Ellipsis,
 
     // Self documenting.
-    // Keywords (alphabetically):
+    // Keywords:
     False,
     None,
     True,
@@ -186,137 +233,55 @@ pub enum Tok {
     Return,
     Try,
     While,
-    Match,
-    Case,
     With,
     Yield,
 
-    // RustPython specific.
-    StartModule,
-    StartInteractive,
-    StartExpression,
+    // Contextual keywords
+    Match,
+    Case,
+
+    // Ruff specific tokens
+    Bogus,
 }
 
-impl Tok {
-    pub fn start_marker(mode: Mode) -> Self {
-        match mode {
-            Mode::Module => Tok::StartModule,
-            Mode::Interactive => Tok::StartInteractive,
-            Mode::Expression => Tok::StartExpression,
-        }
+impl TokenKind {
+    #[inline(always)]
+    pub fn is_keyword(self) -> bool {
+        self >= TokenKind::False && self <= TokenKind::Case
     }
-}
 
-impl fmt::Display for Tok {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        use Tok::*;
-        match self {
-            Name { name } => write!(f, "'{name}'"),
-            Int { value } => write!(f, "'{value}'"),
-            Float { value } => write!(f, "'{value}'"),
-            Complex { real, imag } => write!(f, "{real}j{imag}"),
-            String {
-                value,
-                kind,
-                triple_quoted,
-            } => {
-                let quotes = "\"".repeat(if *triple_quoted { 3 } else { 1 });
-                write!(f, "{kind}{quotes}{value}{quotes}")
-            }
-            Newline => f.write_str("Newline"),
-            NonLogicalNewline => f.write_str("NonLogicalNewline"),
-            Indent => f.write_str("Indent"),
-            Dedent => f.write_str("Dedent"),
-            StartModule => f.write_str("StartProgram"),
-            StartInteractive => f.write_str("StartInteractive"),
-            StartExpression => f.write_str("StartExpression"),
-            EndOfFile => f.write_str("EOF"),
-            Lpar => f.write_str("'('"),
-            Rpar => f.write_str("')'"),
-            Lsqb => f.write_str("'['"),
-            Rsqb => f.write_str("']'"),
-            Colon => f.write_str("':'"),
-            Comma => f.write_str("','"),
-            Comment(value) => f.write_str(value),
-            Semi => f.write_str("';'"),
-            Plus => f.write_str("'+'"),
-            Minus => f.write_str("'-'"),
-            Star => f.write_str("'*'"),
-            Slash => f.write_str("'/'"),
-            Vbar => f.write_str("'|'"),
-            Amper => f.write_str("'&'"),
-            Less => f.write_str("'<'"),
-            Greater => f.write_str("'>'"),
-            Equal => f.write_str("'='"),
-            Dot => f.write_str("'.'"),
-            Percent => f.write_str("'%'"),
-            Lbrace => f.write_str("'{'"),
-            Rbrace => f.write_str("'}'"),
-            EqEqual => f.write_str("'=='"),
-            NotEqual => f.write_str("'!='"),
-            LessEqual => f.write_str("'<='"),
-            GreaterEqual => f.write_str("'>='"),
-            Tilde => f.write_str("'~'"),
-            CircumFlex => f.write_str("'^'"),
-            LeftShift => f.write_str("'<<'"),
-            RightShift => f.write_str("'>>'"),
-            DoubleStar => f.write_str("'**'"),
-            DoubleStarEqual => f.write_str("'**='"),
-            PlusEqual => f.write_str("'+='"),
-            MinusEqual => f.write_str("'-='"),
-            StarEqual => f.write_str("'*='"),
-            SlashEqual => f.write_str("'/='"),
-            PercentEqual => f.write_str("'%='"),
-            AmperEqual => f.write_str("'&='"),
-            VbarEqual => f.write_str("'|='"),
-            CircumflexEqual => f.write_str("'^='"),
-            LeftShiftEqual => f.write_str("'<<='"),
-            RightShiftEqual => f.write_str("'>>='"),
-            DoubleSlash => f.write_str("'//'"),
-            DoubleSlashEqual => f.write_str("'//='"),
-            At => f.write_str("'@'"),
-            AtEqual => f.write_str("'@='"),
-            Rarrow => f.write_str("'->'"),
-            Ellipsis => f.write_str("'...'"),
-            False => f.write_str("'False'"),
-            None => f.write_str("'None'"),
-            True => f.write_str("'True'"),
-            And => f.write_str("'and'"),
-            As => f.write_str("'as'"),
-            Assert => f.write_str("'assert'"),
-            Async => f.write_str("'async'"),
-            Await => f.write_str("'await'"),
-            Break => f.write_str("'break'"),
-            Class => f.write_str("'class'"),
-            Continue => f.write_str("'continue'"),
-            Def => f.write_str("'def'"),
-            Del => f.write_str("'del'"),
-            Elif => f.write_str("'elif'"),
-            Else => f.write_str("'else'"),
-            Except => f.write_str("'except'"),
-            Finally => f.write_str("'finally'"),
-            For => f.write_str("'for'"),
-            From => f.write_str("'from'"),
-            Global => f.write_str("'global'"),
-            If => f.write_str("'if'"),
-            Import => f.write_str("'import'"),
-            In => f.write_str("'in'"),
-            Is => f.write_str("'is'"),
-            Lambda => f.write_str("'lambda'"),
-            Nonlocal => f.write_str("'nonlocal'"),
-            Not => f.write_str("'not'"),
-            Or => f.write_str("'or'"),
-            Pass => f.write_str("'pass'"),
-            Raise => f.write_str("'raise'"),
-            Return => f.write_str("'return'"),
-            Try => f.write_str("'try'"),
-            While => f.write_str("'while'"),
-            Match => f.write_str("'match'"),
-            Case => f.write_str("'case'"),
-            With => f.write_str("'with'"),
-            Yield => f.write_str("'yield'"),
-            ColonEqual => f.write_str("':='"),
-        }
+    #[inline(always)]
+    pub fn is_contextual_keyword(self) -> bool {
+        self >= TokenKind::Match && self <= TokenKind::Case
+    }
+
+    #[inline(always)]
+    pub fn is_non_contextual_keyword(self) -> bool {
+        self.is_keyword() && !self.is_contextual_keyword()
+    }
+
+    #[inline(always)]
+    pub fn is_punctuation(self) -> bool {
+        self >= TokenKind::Lpar && self <= TokenKind::Ellipsis
+    }
+
+    #[inline(always)]
+    pub fn is_literal(self) -> bool {
+        matches!(
+            self,
+            TokenKind::Int | TokenKind::Float | TokenKind::Complex | TokenKind::String
+        )
+    }
+
+    #[inline(always)]
+    pub const fn is_trivia(self) -> bool {
+        matches!(
+            self,
+            TokenKind::Comment
+                | TokenKind::Whitespace
+                | TokenKind::NonLogicalNewline
+                | TokenKind::EndOfFile
+        )
     }
 }
 

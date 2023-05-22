@@ -15,6 +15,7 @@ rustpython-ast = { workspace = true }
 rustpython-parser-core = { workspace = true }
 ruff_text_size = { workspace = true }
 
+bitflags = { workspace = true }
 itertools = { workspace = true }
 num-bigint = { workspace = true }
 num-traits = { workspace = true }
@@ -24,6 +25,7 @@ unic-emoji-char = "0.9.0"
 unic-ucd-ident  = "0.9.0"
 phf = "0.11.1"
 rustc-hash = "1.1.0"
+static_assertions = "1.1.0"
 
 [dev-dependencies]
 insta = { workspace = true }

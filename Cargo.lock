@@ -1786,6 +1786,7 @@ dependencies = [
 name = "ruff-python-parser"
 version = "0.0.0"
 dependencies = [
+ "bitflags 2.3.1",
  "insta",
  "itertools",
  "num-bigint",
@@ -1796,6 +1797,8 @@ dependencies = [
  "rustc-hash",
  "rustpython-ast",
  "rustpython-parser-core",
+ "static_assertions",
+ "thin-vec",
  "unic-emoji-char",
  "unic-ucd-ident",
  "unicode_names2",
@@ -2471,6 +2474,12 @@ dependencies = [
  "unicode-linebreak",
  "unicode-width",
 ]
+
+[[package]]
+name = "thin-vec"
+version = "0.2.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aac81b6fd6beb5884b0cf3321b8117e6e5d47ecb6fc89f414cfdcca8b2fe2dd8"
 
 [[package]]
 name = "thiserror"
