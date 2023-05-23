@@ -1,0 +1,12 @@
+[package]
+name = "ruff_python_resolver"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+env_logger = "0.10.0"
+log = { workspace = true }
+tempdir = "0.3.7"
+tempfile = "3.6.0"
