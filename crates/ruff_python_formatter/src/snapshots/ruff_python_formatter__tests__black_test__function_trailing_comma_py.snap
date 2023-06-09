@@ -97,7 +97,7 @@ some_module.some_function(
      tup = (
          1,
          2,
-@@ -24,46 +19,15 @@
+@@ -24,46 +19,17 @@
  def f(
      a: int = 1,
  ):
@@ -128,7 +128,9 @@ some_module.some_function(
 -    ):
 +    NOT_IMPLEMENTED_call()
 +    NOT_IMPLEMENTED_call()
-+    x = NOT_IMPLEMENTED_value[NOT_IMPLEMENTED_key]
++    x = {NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value}[
++        "NOT_YET_IMPLEMENTED_STRING"
++    ]
 +    if NOT_IMPLEMENTED_left < NOT_IMPLEMENTED_right:
          pass
  
@@ -145,12 +147,12 @@ some_module.some_function(
 -            }
 -        }
 -    }
-+def xxxxxxxxxxxxxxxxxxxxxxxxxxxx() -> NOT_IMPLEMENTED_value[NOT_IMPLEMENTED_key]:
++def xxxxxxxxxxxxxxxxxxxxxxxxxxxx() -> Set["NOT_YET_IMPLEMENTED_STRING"]:
 +    json = {NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value}
  
  
  # The type annotation shouldn't get a trailing comma since that would change its type.
-@@ -80,35 +44,16 @@
+@@ -80,35 +46,16 @@
      pass
  
  
@@ -218,12 +220,14 @@ def f(
 ):
     NOT_IMPLEMENTED_call()
     NOT_IMPLEMENTED_call()
-    x = NOT_IMPLEMENTED_value[NOT_IMPLEMENTED_key]
+    x = {NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value}[
+        "NOT_YET_IMPLEMENTED_STRING"
+    ]
     if NOT_IMPLEMENTED_left < NOT_IMPLEMENTED_right:
         pass
 
 
-def xxxxxxxxxxxxxxxxxxxxxxxxxxxx() -> NOT_IMPLEMENTED_value[NOT_IMPLEMENTED_key]:
+def xxxxxxxxxxxxxxxxxxxxxxxxxxxx() -> Set["NOT_YET_IMPLEMENTED_STRING"]:
     json = {NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value}
 
 

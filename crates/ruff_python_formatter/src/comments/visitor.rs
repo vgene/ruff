@@ -438,6 +438,14 @@ impl<'a> DecoratedComment<'a> {
     pub(super) fn text_position(&self) -> CommentTextPosition {
         self.text_position
     }
+
+    /// Change the position
+    pub(super) fn change_position(self, text_position: CommentTextPosition) -> Self {
+        Self {
+            text_position,
+            ..self
+        }
+    }
 }
 
 impl From<DecoratedComment<'_>> for SourceComment {

@@ -1,12 +1,13 @@
 use crate::comments::visitor::{CommentPlacement, DecoratedComment};
 use crate::comments::CommentTextPosition;
+use crate::expression::expr_slice::{assign_comment_in_slice, ExprSliceCommentSection};
 use crate::trivia::{SimpleTokenizer, TokenKind};
-use ruff_python_ast::node::AnyNodeRef;
+use ruff_python_ast::node::{AnyNodeRef, AstNode};
 use ruff_python_ast::source_code::Locator;
 use ruff_python_ast::whitespace;
 use ruff_python_whitespace::{PythonWhitespace, UniversalNewlines};
 use ruff_text_size::{TextRange, TextSize};
-use rustpython_parser::ast::Ranged;
+use rustpython_parser::ast::{Expr, ExprSlice, Ranged};
 use std::cmp::Ordering;
 
 /// Implements the custom comment placement logic.
@@ -28,6 +29,7 @@ pub(super) fn place_comment<'a>(
         .or_else(|comment| {
             handle_trailing_binary_expression_left_or_operator_comment(comment, locator)
         })
+        .or_else(|comment| handle_slice_comments(comment, locator))
         .or_else(handle_leading_function_with_decorators_comment)
 }
 
@@ -817,6 +819,87 @@ fn handle_module_level_own_line_comment_before_class_or_function_comment<'a>(
     } else {
         // Otherwise attach the comment as trailing comment to the previous statement
         CommentPlacement::trailing(preceding, comment)
+    }
+}
+
+/// Handles the attaching the
+/// ```python
+/// a = "input"[
+///     1 # c
+///     # d
+///     :2
+/// ]
+/// ```
+fn handle_slice_comments<'a>(
+    comment: DecoratedComment<'a>,
+    locator: &Locator,
+) -> CommentPlacement<'a> {
+    let expr_slice = match comment.enclosing_node() {
+        AnyNodeRef::ExprSlice(expr_slice) => expr_slice,
+        AnyNodeRef::ExprSubscript(expr_subscript) => {
+            if expr_subscript.value.end() < expr_subscript.slice.range().start() {
+                if let Expr::Slice(expr_slice) = expr_subscript.slice.as_ref() {
+                    expr_slice
+                } else {
+                    return CommentPlacement::Default(comment);
+                }
+            } else {
+                return CommentPlacement::Default(comment);
+            }
+        }
+        _ => return CommentPlacement::Default(comment),
+    };
+
+    let ExprSlice {
+        range: _,
+        lower,
+        upper,
+        step,
+    } = expr_slice;
+
+    let assignment =
+        assign_comment_in_slice(comment.slice().range(), locator.contents(), expr_slice);
+    let node = match assignment {
+        ExprSliceCommentSection::Lower => lower,
+        ExprSliceCommentSection::Upper => upper,
+        ExprSliceCommentSection::Step => step,
+    };
+
+    if let Some(node) = node {
+        if comment.slice().start() < node.start() {
+            // We can have a comment like
+            // ```
+            // "a"[ # comment
+            //     1:
+            // ]
+            // ```
+            // We format this as an own line comment so we have to change it to one or we'll get
+            // unstable formatting due to leading spaces
+            let comment = if comment.text_position().is_end_of_line() {
+                comment.change_position(CommentTextPosition::OwnLine)
+            } else {
+                comment
+            };
+            CommentPlacement::leading(node.as_ref().into(), comment)
+        } else {
+            // If a trailing comment is an end of line comment that's fine because we have a node
+            // ahead of it
+            CommentPlacement::trailing(node.as_ref().into(), comment)
+        }
+    } else {
+        // We can have a comment like
+        // ```
+        // "a"[ : # comment
+        // ]
+        // ```
+        // We format this as an own line comment so we have to change it to one or we'll get
+        // unstable formatting due to leading spaces
+        let comment = if comment.text_position().is_end_of_line() {
+            comment.change_position(CommentTextPosition::OwnLine)
+        } else {
+            comment
+        };
+        CommentPlacement::dangling(expr_slice.as_any_node_ref(), comment)
     }
 }
 

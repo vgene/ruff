@@ -141,7 +141,7 @@ def g():
 -        prevp = preceding_leaf(p)
 -        if not prevp or prevp.type in OPENING_BRACKETS:
 +    prev = leaf.NOT_IMPLEMENTED_attr
-+    if NOT_YET_IMPLEMENTED_ExprUnaryOp:
++    if -NOT_YET_IMPLEMENTED_ExprUnaryOp:
 +        prevp = NOT_IMPLEMENTED_call()
 +        if NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2:
              return NO
@@ -208,7 +208,7 @@ def g():
 -    if not prev:
 -        prevp = preceding_leaf(p)
 +    prev = leaf.NOT_IMPLEMENTED_attr
-+    if NOT_YET_IMPLEMENTED_ExprUnaryOp:
++    if -NOT_YET_IMPLEMENTED_ExprUnaryOp:
 +        prevp = NOT_IMPLEMENTED_call()
  
 -        if not prevp or prevp.type in OPENING_BRACKETS:
@@ -254,7 +254,7 @@ def f():
     NOT_YET_IMPLEMENTED_StmtAssert
 
     prev = leaf.NOT_IMPLEMENTED_attr
-    if NOT_YET_IMPLEMENTED_ExprUnaryOp:
+    if -NOT_YET_IMPLEMENTED_ExprUnaryOp:
         prevp = NOT_IMPLEMENTED_call()
         if NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2:
             return NO
@@ -292,7 +292,7 @@ def g():
     NOT_YET_IMPLEMENTED_StmtAssert
 
     prev = leaf.NOT_IMPLEMENTED_attr
-    if NOT_YET_IMPLEMENTED_ExprUnaryOp:
+    if -NOT_YET_IMPLEMENTED_ExprUnaryOp:
         prevp = NOT_IMPLEMENTED_call()
 
         if NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2:

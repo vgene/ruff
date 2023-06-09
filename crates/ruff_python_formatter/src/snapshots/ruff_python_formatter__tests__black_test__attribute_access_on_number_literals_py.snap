@@ -67,15 +67,14 @@ y = 100(no)
 +x = NOT_IMPLEMENTED_call()
 +x = 0O777 .NOT_IMPLEMENTED_attr
 +x = NOT_IMPLEMENTED_call()
-+x = NOT_YET_IMPLEMENTED_ExprUnaryOp
++x = -NOT_YET_IMPLEMENTED_ExprUnaryOp
  
 -if (10).real:
 +if 10 .NOT_IMPLEMENTED_attr:
      ...
  
--y = 100[no]
+ y = 100[no]
 -y = 100(no)
-+y = NOT_IMPLEMENTED_value[NOT_IMPLEMENTED_key]
 +y = NOT_IMPLEMENTED_call()
 ```
 
@@ -97,12 +96,12 @@ x = NOT_IMPLEMENTED_call()
 x = NOT_IMPLEMENTED_call()
 x = 0O777 .NOT_IMPLEMENTED_attr
 x = NOT_IMPLEMENTED_call()
-x = NOT_YET_IMPLEMENTED_ExprUnaryOp
+x = -NOT_YET_IMPLEMENTED_ExprUnaryOp
 
 if 10 .NOT_IMPLEMENTED_attr:
     ...
 
-y = NOT_IMPLEMENTED_value[NOT_IMPLEMENTED_key]
+y = 100[no]
 y = NOT_IMPLEMENTED_call()
 ```
 

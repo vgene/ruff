@@ -207,10 +207,10 @@ d={'a':1,
 +NOT_YET_IMPLEMENTED_StmtImport
  
 -from third_party import X, Y, Z
+-
+-from library import some_connection, some_decorator
 +NOT_YET_IMPLEMENTED_StmtImportFrom
  
--from library import some_connection, some_decorator
--
 +NOT_YET_IMPLEMENTED_StmtImportFrom
  # fmt: off
 -from third_party import (X,
@@ -222,7 +222,7 @@ d={'a':1,
  # Comment 1
  
  # Comment 2
-@@ -18,109 +16,111 @@
+@@ -18,109 +16,121 @@
  
  # fmt: off
  def func_no_args():
@@ -272,7 +272,7 @@ d={'a':1,
 +    debug: bool = False,
 +    **kwargs,
 +) -> str:
-+    return NOT_IMPLEMENTED_value[NOT_IMPLEMENTED_key]
++    return text[number : -NOT_YET_IMPLEMENTED_ExprUnaryOp]
 +
 +
  # fmt: on
@@ -285,7 +285,7 @@ d={'a':1,
 +    c=[],
 +    d={NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value},
 +    e=True,
-+    f=NOT_YET_IMPLEMENTED_ExprUnaryOp,
++    f=-NOT_YET_IMPLEMENTED_ExprUnaryOp,
 +    g=NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false,
 +    h="NOT_YET_IMPLEMENTED_STRING",
 +    i="NOT_YET_IMPLEMENTED_STRING",
@@ -305,7 +305,7 @@ d={'a':1,
 -    g: int = 1 if False else 2,
 -    h: str = "",
 -    i: str = r"",
-+    f: int = NOT_YET_IMPLEMENTED_ExprUnaryOp,
++    f: int = -NOT_YET_IMPLEMENTED_ExprUnaryOp,
 +    g: int = NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false,
 +    h: str = "NOT_YET_IMPLEMENTED_STRING",
 +    i: str = "NOT_YET_IMPLEMENTED_STRING",
@@ -326,15 +326,22 @@ d={'a':1,
  
  
  def subscriptlist():
--    atom[
--        # fmt: off
+     atom[
+         # fmt: off
 -        'some big and',
 -        'complex subscript',
 -        # fmt: on
 -        goes + here,
 -        andhere,
--    ]
-+    NOT_IMPLEMENTED_value[NOT_IMPLEMENTED_key]
++        (
++            "NOT_YET_IMPLEMENTED_STRING",
++            "NOT_YET_IMPLEMENTED_STRING",
++            # fmt: on
++            goes
++            + here,
++            andhere,
++        )
+     ]
  
  
  def import_as_names():
@@ -393,7 +400,7 @@ d={'a':1,
      # fmt: off
  
      # hey, that won't work
-@@ -130,13 +130,15 @@
+@@ -130,13 +140,15 @@
  
  
  def on_and_off_broken():
@@ -414,7 +421,7 @@ d={'a':1,
      # fmt: on
      # fmt: off
      # ...but comments still get reformatted even though they should not be
-@@ -145,80 +147,21 @@
+@@ -145,80 +157,21 @@
  
  def long_lines():
      if True:
@@ -553,7 +560,7 @@ def function_signature_stress_test(
     debug: bool = False,
     **kwargs,
 ) -> str:
-    return NOT_IMPLEMENTED_value[NOT_IMPLEMENTED_key]
+    return text[number : -NOT_YET_IMPLEMENTED_ExprUnaryOp]
 
 
 # fmt: on
@@ -563,7 +570,7 @@ def spaces(
     c=[],
     d={NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value},
     e=True,
-    f=NOT_YET_IMPLEMENTED_ExprUnaryOp,
+    f=-NOT_YET_IMPLEMENTED_ExprUnaryOp,
     g=NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false,
     h="NOT_YET_IMPLEMENTED_STRING",
     i="NOT_YET_IMPLEMENTED_STRING",
@@ -578,7 +585,7 @@ def spaces_types(
     c: list = [],
     d: dict = {NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value},
     e: bool = True,
-    f: int = NOT_YET_IMPLEMENTED_ExprUnaryOp,
+    f: int = -NOT_YET_IMPLEMENTED_ExprUnaryOp,
     g: int = NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false,
     h: str = "NOT_YET_IMPLEMENTED_STRING",
     i: str = "NOT_YET_IMPLEMENTED_STRING",
@@ -594,7 +601,17 @@ something = {NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value}
 
 
 def subscriptlist():
-    NOT_IMPLEMENTED_value[NOT_IMPLEMENTED_key]
+    atom[
+        # fmt: off
+        (
+            "NOT_YET_IMPLEMENTED_STRING",
+            "NOT_YET_IMPLEMENTED_STRING",
+            # fmt: on
+            goes
+            + here,
+            andhere,
+        )
+    ]
 
 
 def import_as_names():
