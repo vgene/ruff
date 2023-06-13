@@ -153,9 +153,8 @@ def __await__(): return (yield)
 +    await NOT_IMPLEMENTED_call()
  
  
--@asyncio.coroutine
+ @asyncio.coroutine
 -@some_decorator(with_args=True, many_args=[1, 2, 3])
-+@asyncio.NOT_IMPLEMENTED_attr
 +@NOT_IMPLEMENTED_call()
  def function_signature_stress_test(
      number: int,
@@ -333,7 +332,7 @@ async def coroutine(arg, exec=False):
     await NOT_IMPLEMENTED_call()
 
 
-@asyncio.NOT_IMPLEMENTED_attr
+@asyncio.coroutine
 @NOT_IMPLEMENTED_call()
 def function_signature_stress_test(
     number: int,

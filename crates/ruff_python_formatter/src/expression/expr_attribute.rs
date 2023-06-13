@@ -3,7 +3,7 @@ use crate::expression::parentheses::{
     default_expression_needs_parentheses, NeedsParentheses, Parentheses, Parenthesize,
 };
 use crate::prelude::*;
-use crate::{not_yet_implemented_custom_text, FormatNodeRule};
+use crate::FormatNodeRule;
 use ruff_formatter::write;
 use rustpython_parser::ast::{Constant, Expr, ExprAttribute, ExprConstant};
 
@@ -15,7 +15,7 @@ impl FormatNodeRule<ExprAttribute> for FormatExprAttribute {
         let ExprAttribute {
             value,
             range: _,
-            attr: _,
+            attr,
             ctx: _,
         } = item;
 
@@ -33,7 +33,7 @@ impl FormatNodeRule<ExprAttribute> for FormatExprAttribute {
                 item.value.format(),
                 requires_space.then_some(space()),
                 text("."),
-                not_yet_implemented_custom_text("NOT_IMPLEMENTED_attr")
+                dynamic_text(&attr, None),
             ]
         )
     }
