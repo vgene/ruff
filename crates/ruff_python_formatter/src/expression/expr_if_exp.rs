@@ -2,20 +2,36 @@ use crate::comments::Comments;
 use crate::expression::parentheses::{
     default_expression_needs_parentheses, NeedsParentheses, Parentheses, Parenthesize,
 };
-use crate::{not_yet_implemented_custom_text, FormatNodeRule, PyFormatter};
-use ruff_formatter::{write, Buffer, FormatResult};
+use crate::{AsFormat, FormatNodeRule, PyFormatter};
+use ruff_formatter::prelude::{group, soft_line_break_or_space, space, text};
+use ruff_formatter::{format_args, write, Buffer, FormatResult};
 use rustpython_parser::ast::ExprIfExp;
 
 #[derive(Default)]
 pub struct FormatExprIfExp;
 
 impl FormatNodeRule<ExprIfExp> for FormatExprIfExp {
-    fn fmt_fields(&self, _item: &ExprIfExp, f: &mut PyFormatter) -> FormatResult<()> {
+    fn fmt_fields(&self, item: &ExprIfExp, f: &mut PyFormatter) -> FormatResult<()> {
+        let ExprIfExp {
+            range: _,
+            test,
+            body,
+            orelse,
+        } = item;
+
         write!(
             f,
-            [not_yet_implemented_custom_text(
-                "NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false"
-            )]
+            [group(&format_args![
+                body.format(),
+                soft_line_break_or_space(),
+                text("if"),
+                space(),
+                test.format(),
+                soft_line_break_or_space(),
+                text("else"),
+                space(),
+                orelse.format(),
+            ])]
         )
     }
 }

@@ -276,7 +276,7 @@ last_call()
  Name
  None
  True
-@@ -7,157 +8,143 @@
+@@ -7,157 +8,163 @@
  1
  1.0
  1j
@@ -327,21 +327,6 @@ last_call()
 -    "port1": port1_resource,
 -    "port2": port2_resource,
 -}[port_id]
--1 if True else 2
--str or None if True else str or bytes or None
--(str or None) if True else (str or bytes or None)
--str or None if (1 if True else 2) else str or bytes or None
--(str or None) if (1 if True else 2) else (str or bytes or None)
--(
--    (super_long_variable_name or None)
--    if (1 if super_long_test_name else 2)
--    else (str or bytes or None)
--)
--{"2.7": dead, "3.7": (long_live or die_hard)}
--{"2.7": dead, "3.7": (long_live or die_hard), **{"3.6": verygood}}
--{**a, **b, **c}
--{"2.7", "3.6", "3.7", "3.8", "3.9", ("4.0" if gilectomy else "3.10")}
--({"a": "b"}, (True or False), (+value), "string", b"bytes") or None
 +-NOT_YET_IMPLEMENTED_ExprUnaryOp
 +-NOT_YET_IMPLEMENTED_ExprUnaryOp
 +-NOT_YET_IMPLEMENTED_ExprUnaryOp
@@ -357,12 +342,43 @@ last_call()
 +lambda x: True
 +manylambdas = lambda x: True
 +foo = lambda x: True
-+NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
-+NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
-+NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
-+NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
-+NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
-+(NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false)
+ 1 if True else 2
+-str or None if True else str or bytes or None
+-(str or None) if True else (str or bytes or None)
+-str or None if (1 if True else 2) else str or bytes or None
+-(str or None) if (1 if True else 2) else (str or bytes or None)
+ (
+-    (super_long_variable_name or None)
++    NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2
++    if True
++    else NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2
++)
++(
++    (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
++    if True
++    else (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
++)
++(
++    NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2
++    if (1 if True else 2)
++    else NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2
++)
++(
++    (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
++    if (1 if True else 2)
++    else (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
++)
++(
++    (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
+     if (1 if super_long_test_name else 2)
+-    else (str or bytes or None)
++    else (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
+ )
+-{"2.7": dead, "3.7": (long_live or die_hard)}
+-{"2.7": dead, "3.7": (long_live or die_hard), **{"3.6": verygood}}
+-{**a, **b, **c}
+-{"2.7", "3.6", "3.7", "3.8", "3.9", ("4.0" if gilectomy else "3.10")}
+-({"a": "b"}, (True or False), (+value), "string", b"bytes") or None
 +{NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value}
 +{NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value}
 +{NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value}
@@ -372,7 +388,7 @@ last_call()
 +    "NOT_YET_IMPLEMENTED_STRING",
 +    "NOT_YET_IMPLEMENTED_STRING",
 +    "NOT_YET_IMPLEMENTED_STRING",
-+    (NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false),
++    ("NOT_YET_IMPLEMENTED_STRING" if gilectomy else "NOT_YET_IMPLEMENTED_STRING"),
 +}
 +NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2
  ()
@@ -392,6 +408,11 @@ last_call()
 -    *a,
      4,
      5,
+-]
+-[
+-    4,
+-    *a,
+-    5,
 +    6,
 +    7,
 +    8,
@@ -400,11 +421,6 @@ last_call()
 +    (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2),
 +    (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2),
  ]
--[
--    4,
--    *a,
--    5,
--]
 +[1, 2, 3]
 +[NOT_YET_IMPLEMENTED_ExprStarred]
 +[NOT_YET_IMPLEMENTED_ExprStarred]
@@ -533,7 +549,7 @@ last_call()
  numpy[0, :]
  numpy[:, i]
  numpy[0, :2]
-@@ -169,132 +156,95 @@
+@@ -169,132 +176,99 @@
  numpy[0, [0]]
  numpy[:, [i]]
  numpy[1 : c + 1, c]
@@ -548,7 +564,11 @@ last_call()
 -{"2.7": dead, "3.7": long_live or die_hard}
 -{"2.7", "3.6", "3.7", "3.8", "3.9", "4.0" if gilectomy else "3.10"}
 -[1, 2, 3, 4, 5, 6, 7, 8, 9, 10 or A, 11 or B, 12 or C]
-+NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
++(
++    (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
++    if (NOT_IMPLEMENTED_left < NOT_IMPLEMENTED_right)
++    else (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
++)
 +{NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value}
 +{
 +    "NOT_YET_IMPLEMENTED_STRING",
@@ -556,7 +576,7 @@ last_call()
 +    "NOT_YET_IMPLEMENTED_STRING",
 +    "NOT_YET_IMPLEMENTED_STRING",
 +    "NOT_YET_IMPLEMENTED_STRING",
-+    NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false,
++    "NOT_YET_IMPLEMENTED_STRING" if gilectomy else "NOT_YET_IMPLEMENTED_STRING",
 +}
 +[
 +    1,
@@ -681,6 +701,10 @@ last_call()
 -for z in (i for i in (1, 2, 3)):
 -    ...
 -for i in call():
+-    ...
+-for j in 1 + (2 + 3):
+-    ...
+-while this and that:
 +NOT_IMPLEMENTED_call()
 +NOT_IMPLEMENTED_call()
 +NOT_IMPLEMENTED_call()
@@ -694,10 +718,6 @@ last_call()
 +NOT_YET_IMPLEMENTED_StmtFor
 +while NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2:
      ...
--for j in 1 + (2 + 3):
--    ...
--while this and that:
--    ...
 -for (
 -    addr_family,
 -    addr_type,
@@ -736,7 +756,7 @@ last_call()
      return True
  if (
      aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-@@ -327,21 +277,27 @@
+@@ -327,21 +301,27 @@
  ):
      return True
  if (
@@ -769,7 +789,7 @@ last_call()
      ^ aaaaaaaaaaaaaaaa.i
      << aaaaaaaaaaaaaaaa.k
      >> aaaaaaaaaaaaaaaa.l**aaaaaaaaaaaaaaaa.m // aaaaaaaaaaaaaaaa.n
-@@ -366,5 +322,5 @@
+@@ -366,5 +346,5 @@
      ^ bbbb.a & aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
      ^ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
  )
@@ -823,12 +843,32 @@ lambda x: True
 lambda x: True
 manylambdas = lambda x: True
 foo = lambda x: True
-NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
-NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
-NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
-NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
-NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
-(NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false)
+1 if True else 2
+(
+    NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2
+    if True
+    else NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2
+)
+(
+    (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
+    if True
+    else (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
+)
+(
+    NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2
+    if (1 if True else 2)
+    else NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2
+)
+(
+    (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
+    if (1 if True else 2)
+    else (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
+)
+(
+    (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
+    if (1 if super_long_test_name else 2)
+    else (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
+)
 {NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value}
 {NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value}
 {NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value}
@@ -838,7 +878,7 @@ NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
     "NOT_YET_IMPLEMENTED_STRING",
     "NOT_YET_IMPLEMENTED_STRING",
     "NOT_YET_IMPLEMENTED_STRING",
-    (NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false),
+    ("NOT_YET_IMPLEMENTED_STRING" if gilectomy else "NOT_YET_IMPLEMENTED_STRING"),
 }
 NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2
 ()
@@ -943,7 +983,11 @@ numpy[-NOT_YET_IMPLEMENTED_ExprUnaryOp :, d]
 numpy[:, l[-NOT_YET_IMPLEMENTED_ExprUnaryOp]]
 numpy[:,  :: -NOT_YET_IMPLEMENTED_ExprUnaryOp]
 numpy[np.newaxis, :]
-NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
+(
+    (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
+    if (NOT_IMPLEMENTED_left < NOT_IMPLEMENTED_right)
+    else (NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2)
+)
 {NOT_IMPLEMENTED_dict_key: NOT_IMPLEMENTED_dict_value}
 {
     "NOT_YET_IMPLEMENTED_STRING",
@@ -951,7 +995,7 @@ NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false
     "NOT_YET_IMPLEMENTED_STRING",
     "NOT_YET_IMPLEMENTED_STRING",
     "NOT_YET_IMPLEMENTED_STRING",
-    NOT_IMPLEMENTED_true if NOT_IMPLEMENTED_cond else NOT_IMPLEMENTED_false,
+    "NOT_YET_IMPLEMENTED_STRING" if gilectomy else "NOT_YET_IMPLEMENTED_STRING",
 }
 [
     1,
