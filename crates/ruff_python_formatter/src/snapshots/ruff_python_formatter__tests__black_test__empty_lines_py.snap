@@ -105,7 +105,7 @@ def g():
 ```diff
 --- Black
 +++ Ruff
-@@ -1,89 +1,70 @@
+@@ -1,47 +1,35 @@
 -"""Docstring."""
 +"NOT_YET_IMPLEMENTED_STRING"
  
@@ -119,12 +119,9 @@ def g():
 +    SPACE = "NOT_YET_IMPLEMENTED_STRING"
 +    DOUBLESPACE = "NOT_YET_IMPLEMENTED_STRING"
  
--    t = leaf.type
--    p = leaf.parent  # trailing comment
--    v = leaf.value
-+    t = leaf.NOT_IMPLEMENTED_attr
-+    p = leaf.NOT_IMPLEMENTED_attr  # trailing comment
-+    v = leaf.NOT_IMPLEMENTED_attr
+     t = leaf.type
+     p = leaf.parent  # trailing comment
+     v = leaf.value
  
 -    if t in ALWAYS_NO_SPACE:
 +    if NOT_IMPLEMENTED_left < NOT_IMPLEMENTED_right:
@@ -136,11 +133,10 @@ def g():
 -    assert p is not None, f"INTERNAL ERROR: hand-made leaf without parent: {leaf!r}"
 +    NOT_YET_IMPLEMENTED_StmtAssert
  
--    prev = leaf.prev_sibling
+     prev = leaf.prev_sibling
 -    if not prev:
 -        prevp = preceding_leaf(p)
 -        if not prevp or prevp.type in OPENING_BRACKETS:
-+    prev = leaf.NOT_IMPLEMENTED_attr
 +    if -NOT_YET_IMPLEMENTED_ExprUnaryOp:
 +        prevp = NOT_IMPLEMENTED_call()
 +        if NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2:
@@ -171,11 +167,11 @@ def g():
                  return NO
  
  
- ###############################################################################
+@@ -49,11 +37,10 @@
  # SECTION BECAUSE SECTIONS
  ###############################################################################
--
  
+-
  def g():
 -    NO = ""
 -    SPACE = " "
@@ -184,12 +180,9 @@ def g():
 +    SPACE = "NOT_YET_IMPLEMENTED_STRING"
 +    DOUBLESPACE = "NOT_YET_IMPLEMENTED_STRING"
  
--    t = leaf.type
--    p = leaf.parent
--    v = leaf.value
-+    t = leaf.NOT_IMPLEMENTED_attr
-+    p = leaf.NOT_IMPLEMENTED_attr
-+    v = leaf.NOT_IMPLEMENTED_attr
+     t = leaf.type
+     p = leaf.parent
+@@ -61,29 +48,23 @@
  
      # Comment because comments
  
@@ -204,10 +197,9 @@ def g():
 -    assert p is not None, f"INTERNAL ERROR: hand-made leaf without parent: {leaf!r}"
 +    NOT_YET_IMPLEMENTED_StmtAssert
  
--    prev = leaf.prev_sibling
+     prev = leaf.prev_sibling
 -    if not prev:
 -        prevp = preceding_leaf(p)
-+    prev = leaf.NOT_IMPLEMENTED_attr
 +    if -NOT_YET_IMPLEMENTED_ExprUnaryOp:
 +        prevp = NOT_IMPLEMENTED_call()
  
@@ -242,9 +234,9 @@ def f():
     SPACE = "NOT_YET_IMPLEMENTED_STRING"
     DOUBLESPACE = "NOT_YET_IMPLEMENTED_STRING"
 
-    t = leaf.NOT_IMPLEMENTED_attr
-    p = leaf.NOT_IMPLEMENTED_attr  # trailing comment
-    v = leaf.NOT_IMPLEMENTED_attr
+    t = leaf.type
+    p = leaf.parent  # trailing comment
+    v = leaf.value
 
     if NOT_IMPLEMENTED_left < NOT_IMPLEMENTED_right:
         pass
@@ -253,7 +245,7 @@ def f():
 
     NOT_YET_IMPLEMENTED_StmtAssert
 
-    prev = leaf.NOT_IMPLEMENTED_attr
+    prev = leaf.prev_sibling
     if -NOT_YET_IMPLEMENTED_ExprUnaryOp:
         prevp = NOT_IMPLEMENTED_call()
         if NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2:
@@ -277,9 +269,9 @@ def g():
     SPACE = "NOT_YET_IMPLEMENTED_STRING"
     DOUBLESPACE = "NOT_YET_IMPLEMENTED_STRING"
 
-    t = leaf.NOT_IMPLEMENTED_attr
-    p = leaf.NOT_IMPLEMENTED_attr
-    v = leaf.NOT_IMPLEMENTED_attr
+    t = leaf.type
+    p = leaf.parent
+    v = leaf.value
 
     # Comment because comments
 
@@ -291,7 +283,7 @@ def g():
     # Another comment because more comments
     NOT_YET_IMPLEMENTED_StmtAssert
 
-    prev = leaf.NOT_IMPLEMENTED_attr
+    prev = leaf.prev_sibling
     if -NOT_YET_IMPLEMENTED_ExprUnaryOp:
         prevp = NOT_IMPLEMENTED_call()
 

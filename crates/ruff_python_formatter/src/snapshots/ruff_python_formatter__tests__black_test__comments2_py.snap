@@ -263,26 +263,23 @@ instruction()#comment with bad spacing
  def inline_comments_in_brackets_ruin_everything():
      if typedargslist:
 -        parameters.children = [children[0], body, children[-1]]  # (1  # )1
--        parameters.children = [
-+        parameters.NOT_IMPLEMENTED_attr = [
+         parameters.children = [
 +            children[0],  # (1
 +            body,
 +            children[-NOT_YET_IMPLEMENTED_ExprUnaryOp],  # )1
 +        ]
-+        parameters.NOT_IMPLEMENTED_attr = [
++        parameters.children = [
              children[0],
              body,
 -            children[-1],  # type: ignore
 +            children[-NOT_YET_IMPLEMENTED_ExprUnaryOp],  # type: ignore
          ]
      else:
--        parameters.children = [
--            parameters.children[0],  # (2 what if this was actually long
-+        parameters.NOT_IMPLEMENTED_attr = [
-+            parameters.NOT_IMPLEMENTED_attr[0],  # (2 what if this was actually long
+         parameters.children = [
+             parameters.children[0],  # (2 what if this was actually long
              body,
 -            parameters.children[-1],  # )2
-+            parameters.NOT_IMPLEMENTED_attr[-NOT_YET_IMPLEMENTED_ExprUnaryOp],  # )2
++            parameters.children[-NOT_YET_IMPLEMENTED_ExprUnaryOp],  # )2
          ]
 -        parameters.children = [parameters.what_if_this_was_actually_long.children[0], body, parameters.children[-1]]  # type: ignore
 -    if (
@@ -293,10 +290,10 @@ instruction()#comment with bad spacing
 -        # transport hasn't been notified yet?
 -        and self._proc.poll() is None
 -    ):
-+        parameters.NOT_IMPLEMENTED_attr = [
-+            parameters.NOT_IMPLEMENTED_attr.NOT_IMPLEMENTED_attr[0],
++        parameters.children = [
++            parameters.what_if_this_was_actually_long.children[0],
 +            body,
-+            parameters.NOT_IMPLEMENTED_attr[-NOT_YET_IMPLEMENTED_ExprUnaryOp],
++            parameters.children[-NOT_YET_IMPLEMENTED_ExprUnaryOp],
 +        ]  # type: ignore
 +    if NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2:
          pass
@@ -459,26 +456,26 @@ else:
 # Comment before function.
 def inline_comments_in_brackets_ruin_everything():
     if typedargslist:
-        parameters.NOT_IMPLEMENTED_attr = [
+        parameters.children = [
             children[0],  # (1
             body,
             children[-NOT_YET_IMPLEMENTED_ExprUnaryOp],  # )1
         ]
-        parameters.NOT_IMPLEMENTED_attr = [
+        parameters.children = [
             children[0],
             body,
             children[-NOT_YET_IMPLEMENTED_ExprUnaryOp],  # type: ignore
         ]
     else:
-        parameters.NOT_IMPLEMENTED_attr = [
-            parameters.NOT_IMPLEMENTED_attr[0],  # (2 what if this was actually long
+        parameters.children = [
+            parameters.children[0],  # (2 what if this was actually long
             body,
-            parameters.NOT_IMPLEMENTED_attr[-NOT_YET_IMPLEMENTED_ExprUnaryOp],  # )2
+            parameters.children[-NOT_YET_IMPLEMENTED_ExprUnaryOp],  # )2
         ]
-        parameters.NOT_IMPLEMENTED_attr = [
-            parameters.NOT_IMPLEMENTED_attr.NOT_IMPLEMENTED_attr[0],
+        parameters.children = [
+            parameters.what_if_this_was_actually_long.children[0],
             body,
-            parameters.NOT_IMPLEMENTED_attr[-NOT_YET_IMPLEMENTED_ExprUnaryOp],
+            parameters.children[-NOT_YET_IMPLEMENTED_ExprUnaryOp],
         ]  # type: ignore
     if NOT_IMPLEMENTED_bool_op1 and NOT_IMPLEMENTED_bool_op2:
         pass

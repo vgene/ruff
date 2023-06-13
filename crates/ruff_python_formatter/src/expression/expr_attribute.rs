@@ -15,7 +15,7 @@ impl FormatNodeRule<ExprAttribute> for FormatExprAttribute {
         let ExprAttribute {
             value,
             range: _,
-            attr: _,
+            attr,
             ctx: _,
         } = item;
 
@@ -33,7 +33,7 @@ impl FormatNodeRule<ExprAttribute> for FormatExprAttribute {
                 item.value.format(),
                 requires_space.then_some(space()),
                 text("."),
-                not_yet_implemented_custom_text("NOT_IMPLEMENTED_attr")
+                dynamic_text(&attr, None),
             ]
         )
     }
