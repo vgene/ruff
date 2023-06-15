@@ -188,7 +188,6 @@ with the relevant file contents, the `pyproject.toml` settings, and the followin
 }
 
 #[cfg(test)]
-#[cfg(feature = "jupyter_notebook")]
 mod test {
     use std::path::PathBuf;
     use std::str::FromStr;

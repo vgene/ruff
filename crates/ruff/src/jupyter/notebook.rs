@@ -43,9 +43,6 @@ pub fn round_trip(path: &Path) -> anyhow::Result<String> {
 pub fn is_jupyter_notebook(path: &Path) -> bool {
     path.extension()
         .map_or(false, |ext| ext == JUPYTER_NOTEBOOK_EXT)
-        // For now this is feature gated here, the long term solution depends on
-        // https://github.com/astral-sh/ruff/issues/3410
-        && cfg!(feature = "jupyter_notebook")
 }
 
 impl Cell {
@@ -410,7 +407,6 @@ mod test {
     use test_case::test_case;
 
     use crate::jupyter::index::JupyterIndex;
-    #[cfg(feature = "jupyter_notebook")]
     use crate::jupyter::is_jupyter_notebook;
     use crate::jupyter::schema::Cell;
     use crate::jupyter::Notebook;
@@ -473,7 +469,6 @@ mod test {
     }
 
     #[test]
-    #[cfg(feature = "jupyter_notebook")]
     fn inclusions() {
         let path = Path::new("foo/bar/baz");
         assert!(!is_jupyter_notebook(path));
