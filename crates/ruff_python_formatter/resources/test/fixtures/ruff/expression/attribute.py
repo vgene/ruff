@@ -27,3 +27,10 @@
 
 
 aaaaaaaaaaaaaaaaaaaaa.lllllllllllllllllllllllllllloooooooooong.chaaaaaaaaaaaaaaaaaaaaaaiiiiiiiiiiiiiiiiiiiiiiinnnnnnnn.ooooooooooooooooooooooooofffffffff.aaaaaaaaaattr
+
+x = (
+    a
+    # comment
+    .
+    b
+)

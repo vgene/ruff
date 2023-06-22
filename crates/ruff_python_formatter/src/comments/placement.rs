@@ -1006,20 +1006,25 @@ fn handle_dict_unpacking_comment<'a>(
     CommentPlacement::Default(comment)
 }
 
-// Own line comments coming after the node are always dangling comments
-// ```python
-// (
-//      a
-//      # trailing a comment
-//      . # dangling comment
-//      # or this
-//      b
-// )
-// ```
+/// Own line comments coming after the node are always dangling comments
+/// ```python
+/// (
+///      a
+///      # trailing a comment
+///      . # dangling comment
+///      # or this
+///      b
+/// )
+/// ```
 fn handle_attribute_comment<'a>(
     comment: DecoratedComment<'a>,
     locator: &Locator,
 ) -> CommentPlacement<'a> {
+    /*dbg!(
+        comment.preceding_node(),
+        comment.following_node(),
+        comment.enclosing_node()
+    );*/
     let Some(attribute) = comment.enclosing_node().expr_attribute() else {
         return CommentPlacement::Default(comment);
     };
@@ -1037,6 +1042,10 @@ fn handle_attribute_comment<'a>(
         .expect("Expected the `.` character after the value");
 
     if TextRange::new(dot.end(), attribute.attr.start()).contains(comment.slice().start()) {
+        CommentPlacement::dangling(attribute.into(), comment)
+    } else if TextRange::new(attribute.value.end(), dot.start()).contains(comment.slice().start())
+        && comment.line_position().is_own_line()
+    {
         CommentPlacement::dangling(attribute.into(), comment)
     } else {
         CommentPlacement::Default(comment)
