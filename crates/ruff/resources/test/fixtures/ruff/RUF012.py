@@ -47,3 +47,7 @@ class D(BaseModel):
     perfectly_fine: list[int] = field(default_factory=list)
     class_variable: ClassVar[list[int]] = []
     final_variable: Final[list[int]] = []
+
+
+class E:
+    without_annotation = []

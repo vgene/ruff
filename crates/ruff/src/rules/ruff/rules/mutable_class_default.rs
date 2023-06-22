@@ -21,6 +21,10 @@ use crate::rules::ruff::rules::helpers::{
 /// When mutable value are intended, they should be annotated with
 /// `typing.ClassVar`.
 ///
+/// As a heuristic, this rule is only applied to classes with at least one
+/// annotated attribute, as unannotated classes are assumed to be deliberately
+/// untyped.
+///
 /// ## Examples
 /// ```python
 /// class A:
@@ -47,42 +51,44 @@ impl Violation for MutableClassDefault {
 
 /// RUF012
 pub(crate) fn mutable_class_default(checker: &mut Checker, class_def: &ast::StmtClassDef) {
-    for statement in &class_def.body {
-        match statement {
-            Stmt::AnnAssign(ast::StmtAnnAssign {
-                annotation,
-                value: Some(value),
-                ..
-            }) => {
-                if is_mutable_expr(value, checker.semantic())
-                    && !is_class_var_annotation(annotation, checker.semantic())
-                    && !is_final_annotation(annotation, checker.semantic())
-                    && !is_immutable_annotation(annotation, checker.semantic())
-                    && !is_dataclass(class_def, checker.semantic())
-                {
-                    // Avoid Pydantic models, which end up copying defaults on instance creation.
-                    if is_pydantic_model(class_def, checker.semantic()) {
-                        return;
-                    }
+    if class_def.body.iter().any(Stmt::is_ann_assign_stmt) {
+        for statement in &class_def.body {
+            match statement {
+                Stmt::AnnAssign(ast::StmtAnnAssign {
+                    annotation,
+                    value: Some(value),
+                    ..
+                }) => {
+                    if is_mutable_expr(value, checker.semantic())
+                        && !is_class_var_annotation(annotation, checker.semantic())
+                        && !is_final_annotation(annotation, checker.semantic())
+                        && !is_immutable_annotation(annotation, checker.semantic())
+                        && !is_dataclass(class_def, checker.semantic())
+                    {
+                        // Avoid Pydantic models, which end up copying defaults on instance creation.
+                        if is_pydantic_model(class_def, checker.semantic()) {
+                            return;
+                        }
 
-                    checker
-                        .diagnostics
-                        .push(Diagnostic::new(MutableClassDefault, value.range()));
-                }
-            }
-            Stmt::Assign(ast::StmtAssign { value, .. }) => {
-                if is_mutable_expr(value, checker.semantic()) {
-                    // Avoid Pydantic models, which end up copying defaults on instance creation.
-                    if is_pydantic_model(class_def, checker.semantic()) {
-                        return;
+                        checker
+                            .diagnostics
+                            .push(Diagnostic::new(MutableClassDefault, value.range()));
                     }
-
-                    checker
-                        .diagnostics
-                        .push(Diagnostic::new(MutableClassDefault, value.range()));
                 }
+                Stmt::Assign(ast::StmtAssign { value, .. }) => {
+                    if is_mutable_expr(value, checker.semantic()) {
+                        // Avoid Pydantic models, which end up copying defaults on instance creation.
+                        if is_pydantic_model(class_def, checker.semantic()) {
+                            return;
+                        }
+
+                        checker
+                            .diagnostics
+                            .push(Diagnostic::new(MutableClassDefault, value.range()));
+                    }
+                }
+                _ => (),
             }
-            _ => (),
         }
     }
 }
