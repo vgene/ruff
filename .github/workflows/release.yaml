@@ -47,6 +47,7 @@ jobs:
           cat << EOF >> /home/runner/work/ruff/ruff/run-maturin-action.sh
           #!/bin/bash
           set -e
+          gcc --version -v
           echo "::group::Install Rust"
           which rustup > /dev/null || curl --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.70
           export PATH="\$HOME/.cargo/bin:\$PATH"
