@@ -44,7 +44,7 @@ jobs:
       - name: "Build wheels"
         run: |
           /usr/bin/docker pull quay.io/pypa/manylinux2014_x86_64:latest
-          MY_CMD=$(cat << EOF
+          cat << EOF >> /home/runner/work/ruff/ruff/run-maturin-action.sh
           #!/bin/bash
           set -e
           echo "::group::Install Rust"
@@ -65,8 +65,7 @@ jobs:
           echo "::endgroup::"
           maturin build --target x86_64-unknown-linux-gnu --release --out dist -vv
           EOF
-          )
-          echo $MY_CMD > /home/runner/work/ruff/ruff/run-maturin-action.sh
+          cat /home/runner/work/ruff/ruff/run-maturin-action.sh
           chmod +x /home/runner/work/ruff/ruff/run-maturin-action.sh
           /usr/bin/docker run --rm --workdir /home/runner/work/ruff/ruff -e CARGO_INCREMENTAL=0 -v /home/runner/work/ruff/ruff:/home/runner/work/ruff/ruff quay.io/pypa/manylinux2014_x86_64:latest /home/runner/work/ruff/ruff/run-maturin-action.sh
       - name: "Dump run-maturin-action.sh"
