@@ -49,11 +49,11 @@ jobs:
           set -e
           echo "::group::Install Rust"
           which rustup > /dev/null || curl --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.70
-          export PATH="$HOME/.cargo/bin:$PATH"
+          export PATH="\$HOME/.cargo/bin:\$PATH"
           rustup override set 1.70
           rustup component add llvm-tools-preview || true
           echo "::endgroup::"
-          export PATH="$PATH:/opt/python/cp37-cp37m/bin:/opt/python/cp38-cp38/bin:/opt/python/cp39-cp39/bin:/opt/python/cp310-cp310/bin:/opt/python/cp311-cp311/bin"
+          export PATH="\$PATH:/opt/python/cp37-cp37m/bin:/opt/python/cp38-cp38/bin:/opt/python/cp39-cp39/bin:/opt/python/cp310-cp310/bin:/opt/python/cp311-cp311/bin"
           echo "::group::Install maturin"
           curl -L https://github.com/PyO3/maturin/releases/download/v1.1.0/maturin-x86_64-unknown-linux-musl.tar.gz | tar -xz -C /usr/local/bin
           maturin --version || true
@@ -61,7 +61,7 @@ jobs:
           python3 -m pip install cffi || true
           echo "::endgroup::"
           echo "::group::Install Rust target"
-          if [[ ! -d $(rustc --print target-libdir --target x86_64-unknown-linux-gnu) ]]; then rustup target add x86_64-unknown-linux-gnu; fi
+          if [[ ! -d \$(rustc --print target-libdir --target x86_64-unknown-linux-gnu) ]]; then rustup target add x86_64-unknown-linux-gnu; fi
           echo "::endgroup::"
           maturin build --target x86_64-unknown-linux-gnu --release --out dist -vv
           EOF
