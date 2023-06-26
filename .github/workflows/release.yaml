@@ -90,11 +90,11 @@ jobs:
         run: |
           ARCHIVE_FILE=ruff-${{ matrix.target }}.tar.gz
           tar czvf $ARCHIVE_FILE -C target/${{ matrix.target }}/release ruff
-          tar czvf ruff-ir.tar.gz -C target/x86_64-unknown-linux-gnu/release/deps ruff-0433e779ada491f9.*
+          tar czvf ruff-ir.tar.gz -C target/x86_64-unknown-linux-gnu/release/deps ruff-0433e779ada491f9.o ruff-0433e779ada491f9.ll ruff-0433e779ada491f9.mir ruff-0433e779ada491f9.s
           shasum -a 256 $ARCHIVE_FILE > $ARCHIVE_FILE.sha256
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        if: always()
+      #- name: Setup tmate session
+        #uses: mxschmitt/action-tmate@v3
+        #if: always()
       - name: "Upload binary"
         uses: actions/upload-artifact@v3
         with:
