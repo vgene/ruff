@@ -27,32 +27,6 @@ env:
   RUSTUP_MAX_RETRIES: 10
 
 jobs:
-  sdist:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-      - name: "Prep README.md"
-        run: python scripts/transform_readme.py --target pypi
-      - name: "Build sdist"
-        uses: PyO3/maturin-action@v1
-        with:
-          command: sdist
-          args: --out dist
-      - name: "Test sdist"
-        run: |
-          rustup default $(cat rust-toolchain)
-          pip install dist/${{ env.PACKAGE_NAME }}-*.tar.gz --force-reinstall
-          ruff --help
-          python -m ruff --help
-      - name: "Upload sdist"
-        uses: actions/upload-artifact@v3
-        with:
-          name: wheels
-          path: dist
-
   linux:
     runs-on: ubuntu-latest
     strategy:
@@ -68,11 +42,33 @@ jobs:
       - name: "Prep README.md"
         run: python scripts/transform_readme.py --target pypi
       - name: "Build wheels"
-        uses: PyO3/maturin-action@v1
-        with:
-          target: ${{ matrix.target }}
-          manylinux: auto
-          args: --release --out dist
+        run: |
+          /usr/bin/docker pull quay.io/pypa/manylinux2014_x86_64:latest
+          MY_CMD=$(cat << EOF
+          #!/bin/bash
+          set -e
+          echo "::group::Install Rust"
+          which rustup > /dev/null || curl --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.70
+          export PATH="$HOME/.cargo/bin:$PATH"
+          rustup override set 1.70
+          rustup component add llvm-tools-preview || true
+          echo "::endgroup::"
+          export PATH="$PATH:/opt/python/cp37-cp37m/bin:/opt/python/cp38-cp38/bin:/opt/python/cp39-cp39/bin:/opt/python/cp310-cp310/bin:/opt/python/cp311-cp311/bin"
+          echo "::group::Install maturin"
+          curl -L https://github.com/PyO3/maturin/releases/download/v1.1.0/maturin-x86_64-unknown-linux-musl.tar.gz | tar -xz -C /usr/local/bin
+          maturin --version || true
+          which patchelf > /dev/null || python3 -m pip install patchelf
+          python3 -m pip install cffi || true
+          echo "::endgroup::"
+          echo "::group::Install Rust target"
+          if [[ ! -d $(rustc --print target-libdir --target x86_64-unknown-linux-gnu) ]]; then rustup target add x86_64-unknown-linux-gnu; fi
+          echo "::endgroup::"
+          maturin build --target x86_64-unknown-linux-gnu --release --out dist -vv
+          EOF
+          )
+          echo $MY_CMD > /home/runner/work/ruff/ruff/run-maturin-action.sh
+          chmod +x /home/runner/work/ruff/ruff/run-maturin-action.sh
+          /usr/bin/docker run --rm --workdir /home/runner/work/ruff/ruff -e CARGO_INCREMENTAL=0 -v /home/runner/work/ruff/ruff:/home/runner/work/ruff/ruff quay.io/pypa/manylinux2014_x86_64:latest /home/runner/work/ruff/ruff/run-maturin-action.sh
       - name: "Dump run-maturin-action.sh"
         run: |
           cat /home/runner/work/ruff/ruff/run-maturin-action.sh
